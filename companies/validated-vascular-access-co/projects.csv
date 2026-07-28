@@ -1,0 +1,13 @@
+Project_ID,Project_Name,Status,Description,Primary_Product
+P-01,Gen 2 Coated Device Development,Active,"Full design-control effort for the antimicrobial-coated catheter platform: biocompatibility testing, coating process development, design verification and validation.","Gen 2 (in development)"
+P-02,Kink Complaint CAPA,Active,"Investigation and corrective action for a complaint trend involving catheter kinking at a specific use point on the marketed device.","Gen 1 (marketed)"
+P-03,Extrusion Dimensional SCAR Remediation,Active,"Supplier corrective action and incoming inspection tightening following dimensional nonconformances from the contract extrusion manufacturer.","Gen 1 (marketed)"
+P-04,Training Record and CAPA Effectiveness Remediation,Active,"Internal quality system improvement project addressing the two prior FDA inspection observations: CAPA effectiveness verification and training records following design changes.","Company-wide"
+P-05,Gen 1 Sustaining Engineering,Ongoing,"Routine design changes, ECOs, and minor sustaining engineering support for the marketed device outside the two active CAPA-driven projects.","Gen 1 (marketed)"
+P-06,Early-Stage Next-Platform Feasibility,Active,"Exploratory concept work for a possible future vascular access platform, currently at lab-notebook/feasibility stage, not yet in formal design control.","Future platform (pre-project)"
+P-07,EU CE Marking / MDR Technical File Preparation,Active,"Preparing EU MDR technical documentation to enable CE marking, targeting an EU launch of the marketed device alongside the Gen 2 US launch.","Gen 1 + Gen 2 (EU expansion)"
+P-08,Customer Site Expansion,Active,"Onboarding new hospital and clinic accounts as the commercial footprint expands into new territories.","Gen 1 (marketed)"
+P-09,Conference and Trade Show Program,Active,"Planning and execution of clinical conference presence, booth materials, and physician education events for the year.","Gen 1 (marketed)"
+P-10,Upcoming Internal Quality System Audit,Active,"Company-wide preparation for a scheduled internal audit, including readiness reviews across departments.","Company-wide"
+P-11,New Supplier Qualification - Secondary Component Source,Active,"Qualifying a second-source supplier for a key raw material to reduce single-source supply risk.","Gen 1 (marketed)"
+P-12,Document Control System Cleanup and Training Matrix Rollout,Active,"Internal initiative to clean up the controlled document library and pilot a more structured, role-based training matrix.","Company-wide"

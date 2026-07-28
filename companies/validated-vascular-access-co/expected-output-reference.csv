@@ -1,0 +1,17 @@
+Role,Person,Conservative_SOPs,Lean_MustKnow,Lean_MustLocate,Gap_MissedByConservative,Conservative_Minutes,Lean_Minutes,Minutes_Saved,Pct_Reduction
+Early Phase R&D Engineer,,25,11,15,1,750,405,345,46.0
+Product Development Engineer,A,65,23,42,0,1950,900,1050,53.8
+Product Development Engineer,B,65,15,50,0,1950,700,1250,64.1
+Manufacturing/Process Engineer,A,54,10,48,4,1620,540,1080,66.7
+Manufacturing/Process Engineer,B,54,12,45,3,1620,585,1035,63.9
+Quality Engineer,A,65,10,56,1,1950,580,1370,70.3
+Quality Engineer,B,65,8,57,0,1950,525,1425,73.1
+QA/Compliance Specialist,,65,10,56,1,1950,580,1370,70.3
+Regulatory Affairs Specialist,,39,11,28,0,1170,470,700,59.8
+Assembly Technician,,54,14,40,0,1620,620,1000,61.7
+Buyer/Planner,,14,7,9,2,420,255,165,39.3
+Document Control Coordinator,,65,9,56,0,1950,550,1400,71.8
+Complaint Handling/PMS Specialist,,65,9,56,0,1950,550,1400,71.8
+Marketing Specialist,,13,4,9,0,390,165,225,57.7
+Territory Sales Rep,,11,3,8,0,330,130,200,60.6
+Clinical Specialist,,16,7,10,1,480,260,220,45.8

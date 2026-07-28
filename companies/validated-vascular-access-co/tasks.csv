@@ -1,0 +1,186 @@
+Task_ID,Task_Name,Process_Area,Governing_SOP_ID
+T-001,approves controlled document,Document Control,SOP-001
+T-002,releases controlled document,Document Control,SOP-001
+T-003,authors controlled document,Document Control,SOP-002
+T-004,initiates document change request,Document Control,SOP-003
+T-005,approves document change,Document Control,SOP-003
+T-006,approves quality manual revision,Document Control,SOP-004
+T-007,creates design plan,Design Control,SOP-005
+T-008,owns design project phase gate,Design Control,SOP-005
+T-009,authors design input requirements,Design Control,SOP-006
+T-010,approves design inputs,Design Control,SOP-006
+T-011,authors design output,Design Control,SOP-007
+T-012,reviews design output,Design Control,SOP-007
+T-013,authors verification protocol,Design Control,SOP-008
+T-014,executes verification test,Design Control,SOP-008
+T-015,signs verification report,Design Control,SOP-008
+T-016,authors validation protocol,Design Control,SOP-009
+T-017,executes validation study,Design Control,SOP-009
+T-018,signs validation report,Design Control,SOP-009
+T-019,authors design transfer plan,Design Control,SOP-010
+T-020,approves design transfer to production,Design Control,SOP-010
+T-021,initiates design change request,Design Control,SOP-011
+T-022,approves design change,Design Control,SOP-011
+T-023,assesses design change impact,Design Control,SOP-011
+T-024,compiles DHF entries,Design Control,SOP-012
+T-025,audits DHF completeness,Design Control,SOP-012
+T-026,authors use-related risk analysis,Design Control,SOP-013
+T-027,conducts usability study,Design Control,SOP-013
+T-028,authors risk management plan,Risk Management,SOP-014
+T-029,approves risk management report,Risk Management,SOP-014
+T-030,conducts design FMEA,Risk Management,SOP-015
+T-031,conducts process FMEA,Risk Management,SOP-015
+T-032,updates risk file with post-market data,Risk Management,SOP-016
+T-033,initiates CAPA,CAPA,SOP-017
+T-034,investigates CAPA,CAPA,SOP-017
+T-035,approves CAPA closure,CAPA,SOP-017
+T-036,conducts root cause analysis,CAPA,SOP-018
+T-037,plans effectiveness check,CAPA,SOP-019
+T-038,executes effectiveness check,CAPA,SOP-019
+T-039,identifies nonconforming product,Nonconforming Product,SOP-020
+T-040,tags nonconforming product,Nonconforming Product,SOP-020
+T-041,serves on MRB,Nonconforming Product,SOP-021
+T-042,issues MRB disposition,Nonconforming Product,SOP-021
+T-043,approves use-as-is disposition,Nonconforming Product,SOP-022
+T-044,approves rework disposition,Nonconforming Product,SOP-022
+T-045,conducts internal audit,Internal Audit,SOP-023
+T-046,schedules internal audit,Internal Audit,SOP-023
+T-047,responds to audit finding,Internal Audit,SOP-024
+T-048,approves finding closure,Internal Audit,SOP-024
+T-049,presents management review input,Management Review,SOP-025
+T-050,attends management review,Management Review,SOP-025
+T-051,conducts supplier audit,Supplier Controls,SOP-026
+T-052,approves new supplier,Supplier Controls,SOP-026
+T-053,maintains approved supplier list,Supplier Controls,SOP-027
+T-054,issues purchase order,Supplier Controls,SOP-028
+T-055,verifies PO quality requirements,Supplier Controls,SOP-028
+T-056,performs incoming inspection,Supplier Controls,SOP-029
+T-057,releases incoming lot,Supplier Controls,SOP-029
+T-058,issues SCAR,Supplier Controls,SOP-030
+T-059,reviews supplier CAPA response,Supplier Controls,SOP-030
+T-060,maintains quality agreement,Supplier Controls,SOP-031
+T-061,conducts CM oversight audit,Supplier Controls,SOP-031
+T-062,assigns training matrix,Training,SOP-032
+T-063,approves training matrix change,Training,SOP-032
+T-064,completes assigned training,Training,SOP-033
+T-065,documents training completion,Training,SOP-033
+T-066,completes onboarding training,Training,SOP-034
+T-067,delivers onboarding training,Training,SOP-034
+T-068,receives customer complaint,Complaints/PMS,SOP-035
+T-069,logs complaint intake,Complaints/PMS,SOP-035
+T-070,makes MDR reportability determination,Complaints/PMS,SOP-036
+T-071,submits MDR report,Complaints/PMS,SOP-036
+T-072,investigates complaint sample,Complaints/PMS,SOP-037
+T-073,authors complaint investigation report,Complaints/PMS,SOP-037
+T-074,trends post-market data,Complaints/PMS,SOP-038
+T-075,authors PMS report,Complaints/PMS,SOP-038
+T-076,initiates field action evaluation,Complaints/PMS,SOP-039
+T-077,approves field action,Complaints/PMS,SOP-039
+T-078,creates production schedule,Production,SOP-040
+T-079,releases work order,Production,SOP-040
+T-080,authors work instruction,Production,SOP-041
+T-081,approves work instruction,Production,SOP-041
+T-082,authors validation protocol (process),Production,SOP-042
+T-083,executes IQ/OQ/PQ,Production,SOP-042
+T-084,performs in-process inspection,Production,SOP-043
+T-085,performs final inspection,Production,SOP-044
+T-086,releases finished lot,Production,SOP-044
+T-087,performs manual assembly per workmanship standard,Production,SOP-045
+T-088,performs line clearance,Production,SOP-046
+T-089,verifies line clearance,Production,SOP-046
+T-090,performs rework,Production,SOP-047
+T-091,approves rework procedure,Production,SOP-047
+T-092,calibrates equipment,Equipment,SOP-048
+T-093,investigates out-of-tolerance condition,Equipment,SOP-048
+T-094,performs preventive maintenance,Equipment,SOP-049
+T-095,authors equipment qualification protocol,Equipment,SOP-050
+T-096,gowns for cleanroom entry,Cleanroom/Environmental,SOP-051
+T-097,qualifies for cleanroom gowning,Cleanroom/Environmental,SOP-051
+T-098,performs environmental monitoring sampling,Cleanroom/Environmental,SOP-052
+T-099,reviews EM trend data,Cleanroom/Environmental,SOP-052
+T-100,coordinates cleanroom certification,Cleanroom/Environmental,SOP-053
+T-101,reviews certification report,Cleanroom/Environmental,SOP-053
+T-102,performs facility system maintenance,Cleanroom/Environmental,SOP-054
+T-103,authors sterilization validation protocol,Sterilization,SOP-055
+T-104,reviews sterilization validation report,Sterilization,SOP-055
+T-105,reviews sterilization cycle record,Sterilization,SOP-056
+T-106,approves parametric release,Sterilization,SOP-056
+T-107,reviews bioburden test result,Sterilization,SOP-057
+T-108,reviews sterility test result,Sterilization,SOP-057
+T-109,authors package validation protocol,Packaging,SOP-058
+T-110,executes package integrity test,Packaging,SOP-058
+T-111,authors label content,Packaging,SOP-059
+T-112,approves label artwork,Packaging,SOP-059
+T-113,assigns UDI,Packaging,SOP-060
+T-114,submits GUDID record,Packaging,SOP-060
+T-115,performs label print verification,Packaging,SOP-061
+T-116,compiles DHR,Records,SOP-062
+T-117,reviews DHR for completeness,Records,SOP-062
+T-118,maintains DMR index,Records,SOP-063
+T-119,archives quality record,Records,SOP-064
+T-120,retrieves archived record,Records,SOP-064
+T-121,records lot traceability data,Traceability,SOP-065
+T-122,maintains traceability matrix,Traceability,SOP-066
+T-123,authors promotional material,Marketing/Regulatory,SOP-067
+T-124,approves promotional material for claims compliance,Marketing/Regulatory,SOP-067
+T-125,communicates with clinicians on product use,Marketing/Regulatory,SOP-068
+T-126,authors 510(k) submission,Regulatory,SOP-069
+T-127,approves 510(k) submission,Regulatory,SOP-069
+T-128,performs regulatory change assessment,Regulatory,SOP-070
+T-129,prepares post-market regulatory report,Regulatory,SOP-071
+T-130,maintains establishment registration,Regulatory,SOP-072
+T-131,authors biocompatibility test plan,Biocompatibility,SOP-073
+T-132,reviews biocompatibility test report,Biocompatibility,SOP-073
+T-133,authors material specification,Biocompatibility,SOP-074
+T-134,approves material characterization data,Biocompatibility,SOP-074
+T-135,reviews supplier change notification,Biocompatibility,SOP-075
+T-136,assesses material change impact,Biocompatibility,SOP-075
+T-137,authors clinical evaluation report,Clinical,SOP-076
+T-138,conducts PMCF activity,Clinical,SOP-077
+T-139,maintains lab notebook entries,Early R&D,SOP-078
+T-140,submits invention disclosure,Early R&D,SOP-079
+T-141,screens early-stage project,Early R&D,SOP-079
+T-142,performs feasibility risk screening,Early R&D,SOP-080
+T-143,works in R&D lab space,Early R&D,SOP-081
+T-144,completes general EHS training,EHS,SOP-082
+T-145,handles hazardous chemical/material,EHS,SOP-083
+T-146,signs electronic record in QMS,IT/Data Integrity,SOP-084
+T-147,authors software validation protocol (QMS tools),IT/Data Integrity,SOP-085
+T-148,performs tip bond rework,Rework/Nonconformance-Specific,SOP-086
+T-149,approves tip bond rework disposition,Rework/Nonconformance-Specific,SOP-086
+T-150,performs extrusion lot sort/rework,Rework/Nonconformance-Specific,SOP-087
+T-151,initiates material transfer request,Material/Build Flow,SOP-088
+T-152,approves material transfer,Material/Build Flow,SOP-088
+T-153,initiates engineering build,Material/Build Flow,SOP-089
+T-154,authors build traveler,Material/Build Flow,SOP-089
+T-155,executes tip pull test,Bench Test Protocols,SOP-090
+T-156,executes kink resistance test,Bench Test Protocols,SOP-091
+T-157,executes coating adhesion test,Bench Test Protocols,SOP-092
+T-158,executes corrosion resistance test,Bench Test Protocols,SOP-093
+T-159,executes simulated use test,Bench Test Protocols,SOP-094
+T-160,executes accelerated aging study,Bench Test Protocols,SOP-095
+T-161,executes real-time aging study,Bench Test Protocols,SOP-096
+T-162,monitors real-time aging samples,Bench Test Protocols,SOP-096
+T-163,authors Gage R&R study,Bench Test Protocols,SOP-097
+T-164,approves test method validation,Bench Test Protocols,SOP-097
+T-165,operates tip-forming machine,Machine-Specific Work Instructions,SOP-098
+T-166,operates hub bonding welder,Machine-Specific Work Instructions,SOP-099
+T-167,operates leak test station,Machine-Specific Work Instructions,SOP-100
+T-168,operates coating dip-line,Machine-Specific Work Instructions,SOP-101
+T-169,operates pad printer,Machine-Specific Work Instructions,SOP-102
+T-170,generates label file from software template,Labeling-Specific,SOP-103
+T-171,operates label verification station,Labeling-Specific,SOP-104
+T-172,calibrates test fixture,Bench Test Protocols,SOP-105
+T-173,verifies test fixture,Bench Test Protocols,SOP-105
+T-174,logs returned complaint sample,Rework/Nonconformance-Specific,SOP-106
+T-175,handles RMA sample,Rework/Nonconformance-Specific,SOP-106
+T-176,prepares coating solution,Machine-Specific Work Instructions,SOP-107
+T-177,initiates ECO,Material/Build Flow,SOP-108
+T-178,routes ECO for approval,Material/Build Flow,SOP-108
+T-179,decontaminates returned device sample,Rework/Nonconformance-Specific,SOP-109
+T-180,performs cleanroom cleaning/sanitization,Cleanroom/Environmental,SOP-110
+T-181,disposes of hazardous material/waste,EHS,SOP-111
+T-182,stores hazardous material,EHS,SOP-112
+T-183,stores temperature/shelf-life-sensitive material,EHS,SOP-113
+T-184,authors eu technical documentation,Regulatory,SOP-114
+T-185,maintains ce technical file,Regulatory,SOP-114
