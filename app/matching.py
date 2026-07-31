@@ -62,6 +62,16 @@ class MatrixResult:
     lean_minutes: int
     minutes_saved: int
     pct_reduction: float
+    # minutes_saved nets these two together, which can read as a broken
+    # negative number when a role has enough gaps. Both are exposed
+    # separately so the UI/reports can show them as distinct figures
+    # instead of only the net: overtraining_minutes_saved is time no
+    # longer spent deep-reviewing SOPs downgraded to Must-Locate;
+    # gap_training_minutes_required is new time needed for Must-Know SOPs
+    # the conservative approach never would have surfaced at all.
+    # Always holds: overtraining_minutes_saved - gap_training_minutes_required == minutes_saved.
+    overtraining_minutes_saved: int
+    gap_training_minutes_required: int
 
 
 def _is_conservative_assigned(department: str, broad_applicability: str) -> bool:
@@ -170,6 +180,18 @@ def compute_matrix(
         else 0.0
     )
 
+    # Every conservative-assigned SOP is either Must-Know or Must-Locate
+    # under lean (must_locate_sop_ids == conservative_sop_ids - must_know_sop_ids),
+    # so this is the lean-tier cost of exactly the SOPs the conservative
+    # approach already flagged — no gap SOPs included.
+    conservative_and_must_know_count = len(conservative_sop_ids) - len(must_locate_sop_ids)
+    conservative_only_lean_minutes = (
+        conservative_and_must_know_count * must_know_minutes
+        + len(must_locate_sop_ids) * must_locate_minutes
+    )
+    overtraining_minutes_saved = conservative_minutes - conservative_only_lean_minutes
+    gap_training_minutes_required = len(gap_sop_ids) * must_know_minutes
+
     return MatrixResult(
         profile_id=profile.profile_id,
         role_name=profile.role_name,
@@ -185,6 +207,8 @@ def compute_matrix(
         lean_minutes=lean_minutes,
         minutes_saved=minutes_saved,
         pct_reduction=pct_reduction,
+        overtraining_minutes_saved=overtraining_minutes_saved,
+        gap_training_minutes_required=gap_training_minutes_required,
     )
 
 

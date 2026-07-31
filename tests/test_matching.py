@@ -66,6 +66,104 @@ class MatchingTests(unittest.TestCase):
         self.assertEqual(result.lean_minutes, 65)
         self.assertEqual(result.minutes_saved, -5)
 
+    def test_overtraining_and_gap_minutes_reconcile_to_net_minutes_saved(self):
+        # P-3 (Support Agent) has a gap (SOP-A4) that costs more than the
+        # Must-Locate downgrade (SOP-A1) saves, so the net is negative even
+        # though both components are individually well-defined and >= 0.
+        result = compute_matrix(self.dataset, "P-3")
+        self.assertEqual(result.overtraining_minutes_saved, 25)  # SOP-A1: 30 - 5
+        self.assertEqual(result.gap_training_minutes_required, 30)  # SOP-A4: 1 gap * 30
+        self.assertEqual(
+            result.overtraining_minutes_saved - result.gap_training_minutes_required,
+            result.minutes_saved,
+        )
+
+    def test_overtraining_and_gap_minutes_reconcile_for_every_profile(self):
+        # The identity must hold everywhere, not just the one negative-net
+        # fixture profile, and regardless of custom time assumptions.
+        for profile_id in self.dataset.profile_order():
+            result = compute_matrix(
+                self.dataset,
+                profile_id,
+                must_know_minutes=45,
+                must_locate_minutes=10,
+                conservative_minutes_per_sop=20,
+            )
+            self.assertEqual(
+                result.overtraining_minutes_saved - result.gap_training_minutes_required,
+                result.minutes_saved,
+            )
+
+    def test_custom_time_assumptions_change_the_result(self):
+        default_result = compute_matrix(self.dataset, "P-2")
+        custom_result = compute_matrix(
+            self.dataset,
+            "P-2",
+            must_know_minutes=100,
+            must_locate_minutes=1,
+            conservative_minutes_per_sop=1,
+        )
+        self.assertNotEqual(default_result.lean_minutes, custom_result.lean_minutes)
+        self.assertEqual(custom_result.conservative_minutes, 2)  # 2 conservative SOPs * 1
+        self.assertEqual(custom_result.lean_minutes, 100 + 1)  # 1 Must-Know*100 + 1 Must-Locate*1
+
+
+class ComparisonSummaryDisplayTests(unittest.TestCase):
+    """Covers the display/reporting layer (app/reports.py), not just the
+    underlying compute_matrix math: does the comparison summary actually
+    surface the two separate time figures instead of only the net?
+    """
+
+    @classmethod
+    def setUpClass(cls):
+        cls.dataset = load_dataset(FIXTURE_DIR)
+
+    def test_comparison_summary_exposes_both_components_and_the_net(self):
+        from app.matching import compute_all
+        from app.reports import comparison_summary_rows
+
+        results = compute_all(self.dataset)
+        rows = {r["Role"]: r for r in comparison_summary_rows(results)}
+        support_agent_row = rows["Support Agent"]
+
+        self.assertEqual(support_agent_row["Time_Saved_Reduced_Overtraining"], 25)
+        self.assertEqual(support_agent_row["Time_Required_Gap_Training"], 30)
+        self.assertEqual(support_agent_row["Minutes_Saved"], -5)
+        # The net figure must still be present and correct (reference-CSV
+        # compatibility) even though it's negative and no longer the only
+        # number shown.
+        self.assertEqual(
+            support_agent_row["Time_Saved_Reduced_Overtraining"]
+            - support_agent_row["Time_Required_Gap_Training"],
+            support_agent_row["Minutes_Saved"],
+        )
+
+    def test_company_rollup_aggregates_both_components(self):
+        from app.matching import compute_all
+        from app.reports import company_rollup_rows
+
+        results = compute_all(self.dataset)
+        rows = {r["Primary_Department"]: r for r in company_rollup_rows(results)}
+        total_row = rows["TOTAL"]
+
+        expected_overtraining_total = sum(
+            r.overtraining_minutes_saved for r in compute_all(self.dataset)
+        )
+        expected_gap_total = sum(
+            r.gap_training_minutes_required for r in compute_all(self.dataset)
+        )
+        self.assertEqual(
+            total_row["Time_Saved_Reduced_Overtraining_Total"], expected_overtraining_total
+        )
+        self.assertEqual(
+            total_row["Time_Required_Gap_Training_Total"], expected_gap_total
+        )
+        self.assertEqual(
+            total_row["Time_Saved_Reduced_Overtraining_Total"]
+            - total_row["Time_Required_Gap_Training_Total"],
+            total_row["Minutes_Saved_Total"],
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
