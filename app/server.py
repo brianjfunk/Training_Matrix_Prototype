@@ -10,6 +10,7 @@ folder, with zero code changes required.
 from __future__ import annotations
 
 from pathlib import Path
+from urllib.parse import urlencode
 
 from fastapi import FastAPI, HTTPException, Query
 from fastapi.responses import HTMLResponse, PlainTextResponse
@@ -17,7 +18,13 @@ from fastapi.templating import Jinja2Templates
 from starlette.requests import Request
 
 from app.dataset import DatasetError, load_dataset
-from app.matching import compute_all, compute_matrix
+from app.matching import (
+    DEFAULT_CONSERVATIVE_MINUTES,
+    DEFAULT_MUST_KNOW_MINUTES,
+    DEFAULT_MUST_LOCATE_MINUTES,
+    compute_all,
+    compute_matrix,
+)
 from app.reports import (
     comparison_summary_rows,
     company_rollup_rows,
@@ -39,6 +46,16 @@ def list_companies() -> list[str]:
     return sorted(p.name for p in COMPANIES_DIR.iterdir() if p.is_dir())
 
 
+def _time_assumption_kwargs(
+    must_know_minutes: int, must_locate_minutes: int, conservative_minutes_per_sop: int
+) -> dict[str, int]:
+    return {
+        "must_know_minutes": max(0, must_know_minutes),
+        "must_locate_minutes": max(0, must_locate_minutes),
+        "conservative_minutes_per_sop": max(0, conservative_minutes_per_sop),
+    }
+
+
 def _load_or_404(company: str):
     company_dir = COMPANIES_DIR / company
     if not company_dir.is_dir():
@@ -50,7 +67,14 @@ def _load_or_404(company: str):
 
 
 @app.get("/", response_class=HTMLResponse)
-def index(request: Request, company: str | None = None, profile: str | None = None):
+def index(
+    request: Request,
+    company: str | None = None,
+    profile: str | None = None,
+    must_know_minutes: int = DEFAULT_MUST_KNOW_MINUTES,
+    must_locate_minutes: int = DEFAULT_MUST_LOCATE_MINUTES,
+    conservative_minutes_per_sop: int = DEFAULT_CONSERVATIVE_MINUTES,
+):
     companies = list_companies()
     if not companies:
         return templates.TemplateResponse(
@@ -60,10 +84,14 @@ def index(request: Request, company: str | None = None, profile: str | None = No
     company = company if company in companies else companies[0]
     dataset = _load_or_404(company)
 
+    time_kwargs = _time_assumption_kwargs(
+        must_know_minutes, must_locate_minutes, conservative_minutes_per_sop
+    )
+
     profile_ids = dataset.profile_order()
     profile = profile if profile in profile_ids else (profile_ids[0] if profile_ids else None)
 
-    all_results = compute_all(dataset)
+    all_results = compute_all(dataset, **time_kwargs)
     summary_rows = comparison_summary_rows(all_results)
     rollup_rows = company_rollup_rows(all_results)
     gap_rows = gap_report_rows(all_results)
@@ -71,7 +99,7 @@ def index(request: Request, company: str | None = None, profile: str | None = No
     selected_result = None
     assignments_by_tier: dict[str, list] = {"Must-Know": [], "Must-Locate": [], "Not Applicable": []}
     if profile is not None:
-        selected_result = compute_matrix(dataset, profile)
+        selected_result = compute_matrix(dataset, profile, **time_kwargs)
         for a in selected_result.assignments:
             assignments_by_tier[a.tier].append(a)
 
@@ -89,15 +117,26 @@ def index(request: Request, company: str | None = None, profile: str | None = No
             "rollup_rows": rollup_rows,
             "gap_rows": gap_rows,
             "gap_count": len(gap_rows),
+            "time_kwargs": time_kwargs,
+            "export_qs": urlencode({"company": company, **time_kwargs}),
             "error": None,
         },
     )
 
 
 @app.get("/export/{report}.csv")
-def export_csv(report: str, company: str = Query(...)):
+def export_csv(
+    report: str,
+    company: str = Query(...),
+    must_know_minutes: int = DEFAULT_MUST_KNOW_MINUTES,
+    must_locate_minutes: int = DEFAULT_MUST_LOCATE_MINUTES,
+    conservative_minutes_per_sop: int = DEFAULT_CONSERVATIVE_MINUTES,
+):
     dataset = _load_or_404(company)
-    all_results = compute_all(dataset)
+    time_kwargs = _time_assumption_kwargs(
+        must_know_minutes, must_locate_minutes, conservative_minutes_per_sop
+    )
+    all_results = compute_all(dataset, **time_kwargs)
 
     builders = {
         "master_matrix": master_matrix_rows,

@@ -44,7 +44,16 @@ def master_matrix_rows(results: list[MatrixResult]) -> list[dict]:
 
 
 def comparison_summary_rows(results: list[MatrixResult]) -> list[dict]:
-    """One row per profile, matching expected-output-reference.csv's schema."""
+    """One row per profile, matching expected-output-reference.csv's schema.
+
+    Minutes_Saved/Pct_Reduction are kept as the net figures (required for
+    exact-match compatibility with expected-output-reference.csv). The net
+    can read as broken when it goes negative (a role with enough gaps costs
+    more lean training time than it saves), so
+    Time_Saved_Reduced_Overtraining and Time_Required_Gap_Training are also
+    exposed as the two components that explain that net, rather than
+    forcing readers to infer them from one number.
+    """
     rows = []
     for r in results:
         rows.append(
@@ -59,6 +68,8 @@ def comparison_summary_rows(results: list[MatrixResult]) -> list[dict]:
                 "Gap_MissedByConservative": len(r.gap_sop_ids),
                 "Conservative_Minutes": r.conservative_minutes,
                 "Lean_Minutes": r.lean_minutes,
+                "Time_Saved_Reduced_Overtraining": r.overtraining_minutes_saved,
+                "Time_Required_Gap_Training": r.gap_training_minutes_required,
                 "Minutes_Saved": r.minutes_saved,
                 "Pct_Reduction": f"{r.pct_reduction:.1f}",
             }
@@ -85,6 +96,8 @@ def company_rollup_rows(results: list[MatrixResult]) -> list[dict]:
                 "conservative_minutes": 0,
                 "lean_minutes": 0,
                 "minutes_saved": 0,
+                "overtraining_minutes_saved": 0,
+                "gap_training_minutes_required": 0,
             },
         )
         bucket["profile_count"] += 1
@@ -95,6 +108,8 @@ def company_rollup_rows(results: list[MatrixResult]) -> list[dict]:
         bucket["conservative_minutes"] += r.conservative_minutes
         bucket["lean_minutes"] += r.lean_minutes
         bucket["minutes_saved"] += r.minutes_saved
+        bucket["overtraining_minutes_saved"] += r.overtraining_minutes_saved
+        bucket["gap_training_minutes_required"] += r.gap_training_minutes_required
 
     def _row(department: str, b: dict[str, int]) -> dict:
         pct = (
@@ -111,6 +126,8 @@ def company_rollup_rows(results: list[MatrixResult]) -> list[dict]:
             "Gap_Count_Total": b["gap_count"],
             "Conservative_Minutes_Total": b["conservative_minutes"],
             "Lean_Minutes_Total": b["lean_minutes"],
+            "Time_Saved_Reduced_Overtraining_Total": b["overtraining_minutes_saved"],
+            "Time_Required_Gap_Training_Total": b["gap_training_minutes_required"],
             "Minutes_Saved_Total": b["minutes_saved"],
             "Pct_Reduction": f"{pct:.1f}",
         }
@@ -126,6 +143,8 @@ def company_rollup_rows(results: list[MatrixResult]) -> list[dict]:
         "conservative_minutes": 0,
         "lean_minutes": 0,
         "minutes_saved": 0,
+        "overtraining_minutes_saved": 0,
+        "gap_training_minutes_required": 0,
     }
     for b in by_dept.values():
         for key in company_totals:
