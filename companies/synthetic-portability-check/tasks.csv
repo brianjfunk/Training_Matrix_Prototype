@@ -1,0 +1,9 @@
+Task_ID,Task_Name,Process_Area,Governing_SOP_ID
+TK-01,operates forklift,Safety,SOP-A1
+TK-02,counts physical inventory,Inventory,SOP-A2
+TK-03,issues customer refund,Customer Support,SOP-A3
+TK-04,approves new vendor,Procurement,SOP-A4
+TK-05,deploys production code,Engineering,SOP-A5
+TK-06,reviews pull request,Engineering,SOP-A5
+TK-07,reconciles vendor invoice,Procurement,SOP-A4
+TK-08,handles customer complaint,Customer Support,SOP-A3

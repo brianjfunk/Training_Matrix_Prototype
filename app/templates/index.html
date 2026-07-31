@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Role-Aware Training Matrix</title>
+<style>
+  :root { color-scheme: light dark; }
+  body { font-family: -apple-system, Segoe UI, Helvetica, Arial, sans-serif; margin: 0; padding: 1.5rem 2rem 4rem; max-width: 1100px; }
+  h1 { font-size: 1.4rem; margin-bottom: 0.25rem; }
+  .subtitle { color: #666; margin-top: 0; margin-bottom: 1.5rem; }
+  form.controls { display: flex; gap: 1rem; align-items: end; flex-wrap: wrap; margin-bottom: 1.5rem; }
+  form.controls label { display: flex; flex-direction: column; font-size: 0.8rem; font-weight: 600; gap: 0.25rem; }
+  select { padding: 0.4rem; font-size: 0.95rem; }
+  table { border-collapse: collapse; width: 100%; margin-bottom: 1.5rem; font-size: 0.88rem; }
+  th, td { border: 1px solid #ccc4; padding: 0.4rem 0.6rem; text-align: left; vertical-align: top; }
+  th { background: #8883; position: sticky; top: 0; }
+  tr.tier-Must-Know { background: #ffefc030; }
+  tr.tier-Must-Locate { background: #d9edf730; }
+  tr.gap-row { outline: 2px solid #d9534f55; }
+  .badge { display: inline-block; padding: 0.1rem 0.5rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
+  .badge-Must-Know { background: #f0ad4e33; }
+  .badge-Must-Locate { background: #5bc0de33; }
+  .badge-Not-Applicable { background: #77777733; }
+  .badge-gap { background: #d9534f33; margin-left: 0.4rem; }
+  section { margin-bottom: 2.5rem; }
+  h2 { font-size: 1.1rem; border-bottom: 1px solid #8883; padding-bottom: 0.3rem; }
+  .stat-row { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1rem; }
+  .stat { background: #8882; border-radius: 8px; padding: 0.6rem 1rem; min-width: 8rem; }
+  .stat .value { font-size: 1.4rem; font-weight: 700; display: block; }
+  .stat .label { font-size: 0.75rem; color: #666; }
+  a.export { font-size: 0.85rem; margin-left: 1rem; }
+  .error { color: #d9534f; font-weight: 600; }
+  details { margin-bottom: 1.5rem; }
+</style>
+</head>
+<body>
+<h1>Role-Aware Training Matrix</h1>
+<p class="subtitle">Must-Know vs. Must-Locate SOP training, split from actual task scope of work — not job-description guesswork.</p>
+
+{% if error %}
+  <p class="error">{{ error }}</p>
+{% else %}
+
+<form class="controls" method="get" action="/">
+  <label>Company dataset
+    <select name="company" onchange="this.form.submit()">
+      {% for c in companies %}
+        <option value="{{ c }}" {% if c == company %}selected{% endif %}>{{ c }}</option>
+      {% endfor %}
+    </select>
+  </label>
+  <label>Profile
+    <select name="profile" onchange="this.form.submit()">
+      {% for p in profiles %}
+        <option value="{{ p.profile_id }}" {% if p.profile_id == selected_profile_id %}selected{% endif %}>
+          {{ p.role_name }}{% if p.person_label %} ({{ p.person_label }}){% endif %} — {{ p.primary_department }}
+        </option>
+      {% endfor %}
+    </select>
+  </label>
+</form>
+
+{% if selected_result %}
+<section>
+  <h2>{{ selected_result.role_name }}{% if selected_result.person_label %} ({{ selected_result.person_label }}){% endif %}
+    <span class="badge badge-Not-Applicable">{{ selected_result.primary_department }}</span>
+  </h2>
+  <div class="stat-row">
+    <div class="stat"><span class="value">{{ selected_result.conservative_sop_ids|length }}</span><span class="label">Conservative SOPs</span></div>
+    <div class="stat"><span class="value">{{ selected_result.must_know_sop_ids|length }}</span><span class="label">Lean Must-Know</span></div>
+    <div class="stat"><span class="value">{{ selected_result.must_locate_sop_ids|length }}</span><span class="label">Lean Must-Locate</span></div>
+    <div class="stat"><span class="value">{{ selected_result.gap_sop_ids|length }}</span><span class="label">Gaps flagged</span></div>
+    <div class="stat"><span class="value">{{ selected_result.minutes_saved }}</span><span class="label">Minutes saved</span></div>
+    <div class="stat"><span class="value">{{ "%.1f"|format(selected_result.pct_reduction) }}%</span><span class="label">Pct reduction</span></div>
+  </div>
+
+  {% for tier in ["Must-Know", "Must-Locate", "Not Applicable"] %}
+  <details {% if tier != "Not Applicable" %}open{% endif %}>
+    <summary><strong>{{ tier }}</strong> ({{ assignments_by_tier[tier]|length }})</summary>
+    <table>
+      <thead><tr><th>SOP ID</th><th>Title</th><th>Process Area</th><th>Rationale</th></tr></thead>
+      <tbody>
+        {% for a in assignments_by_tier[tier] %}
+        <tr class="tier-{{ tier|replace(' ', '-') }} {% if a.is_gap %}gap-row{% endif %}">
+          <td>{{ a.sop_id }}{% if a.is_gap %}<span class="badge badge-gap">GAP</span>{% endif %}</td>
+          <td>{{ a.sop_title }}</td>
+          <td>{{ a.process_area }}</td>
+          <td>{{ a.rationale }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </details>
+  {% endfor %}
+  <a class="export" href="/export/master_matrix.csv?company={{ company }}">Export full master matrix (all profiles) CSV</a>
+</section>
+{% endif %}
+
+<section>
+  <h2>Comparison summary — all profiles
+    <a class="export" href="/export/comparison_summary.csv?company={{ company }}">Export CSV</a>
+  </h2>
+  <table>
+    <thead><tr>
+      <th>Role</th><th>Person</th><th>Dept</th><th>Conservative</th><th>Must-Know</th><th>Must-Locate</th>
+      <th>Gaps</th><th>Cons. Minutes</th><th>Lean Minutes</th><th>Minutes Saved</th><th>% Reduction</th>
+    </tr></thead>
+    <tbody>
+      {% for row in summary_rows %}
+      <tr>
+        <td>{{ row.Role }}</td><td>{{ row.Person }}</td><td>{{ row.Primary_Department }}</td>
+        <td>{{ row.Conservative_SOPs }}</td><td>{{ row.Lean_MustKnow }}</td><td>{{ row.Lean_MustLocate }}</td>
+        <td>{{ row.Gap_MissedByConservative }}</td><td>{{ row.Conservative_Minutes }}</td>
+        <td>{{ row.Lean_Minutes }}</td><td>{{ row.Minutes_Saved }}</td><td>{{ row.Pct_Reduction }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Company-wide rollup — by Primary_Department
+    <a class="export" href="/export/company_rollup.csv?company={{ company }}">Export CSV</a>
+  </h2>
+  <table>
+    <thead><tr>
+      <th>Department</th><th>Profiles</th><th>Conservative Total</th><th>Must-Know Total</th>
+      <th>Must-Locate Total</th><th>Gaps Total</th><th>Cons. Minutes</th><th>Lean Minutes</th>
+      <th>Minutes Saved</th><th>% Reduction</th>
+    </tr></thead>
+    <tbody>
+      {% for row in rollup_rows %}
+      <tr {% if row.Primary_Department == "TOTAL" %}style="font-weight:700;border-top:2px solid #8888"{% endif %}>
+        <td>{{ row.Primary_Department }}</td><td>{{ row.Profile_Count }}</td>
+        <td>{{ row.Conservative_SOPs_Total }}</td><td>{{ row.Lean_MustKnow_Total }}</td>
+        <td>{{ row.Lean_MustLocate_Total }}</td><td>{{ row.Gap_Count_Total }}</td>
+        <td>{{ row.Conservative_Minutes_Total }}</td><td>{{ row.Lean_Minutes_Total }}</td>
+        <td>{{ row.Minutes_Saved_Total }}</td><td>{{ row.Pct_Reduction }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+<section>
+  <h2>Gap report — Must-Know SOPs the conservative approach would have missed ({{ gap_count }})
+    <a class="export" href="/export/gap_report.csv?company={{ company }}">Export CSV</a>
+  </h2>
+  <table>
+    <thead><tr><th>Profile</th><th>Department</th><th>SOP ID</th><th>SOP Title</th><th>Rationale</th></tr></thead>
+    <tbody>
+      {% for row in gap_rows %}
+      <tr>
+        <td>{{ row.Profile }}</td><td>{{ row.Primary_Department }}</td><td>{{ row.SOP_ID }}</td>
+        <td>{{ row.SOP_Title }}</td><td>{{ row.Rationale }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</section>
+
+{% endif %}
+</body>
+</html>

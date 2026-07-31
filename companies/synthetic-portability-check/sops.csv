@@ -1,0 +1,6 @@
+SOP_ID,Title,Process_Area,Summary,Broad_Applicability_Conservative,Key_Tasks_Governed
+SOP-A1,Warehouse Safety Procedure,Safety,Defines safety practices for all staff on site.,"All Employees",""
+SOP-A2,Inventory Reconciliation,Inventory,Governs periodic physical inventory counts.,"Logistics, Finance",""
+SOP-A3,Customer Refund Policy,Customer Support,Governs issuance of refunds and complaint handling.,"Customer Support",""
+SOP-A4,Vendor Onboarding,Procurement,Governs approval and onboarding of new vendors.,"Procurement, Finance",""
+SOP-A5,Code Deployment Checklist,Engineering,Governs review and deployment of production code changes.,"Engineering",""
